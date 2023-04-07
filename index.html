@@ -7,11 +7,16 @@
     <title>To-do list</title>
     <link rel="stylesheet" href="main.css" />
   </head>
+  <!-- I have consulted the tutorial website https://www.w3schools.com/howto/howto_js_todolist.asp -->
   <body>
-    <header>
-      <h1>To-do list</h1>
-    </header>
-
+    <div class="title">
+      <header>
+        <h1>To-do list</h1>
+      </header>
+      <input type="text" id="textNewTask" placeholder="I need to..." />
+      <button onclick="newElement()" class="addButton">+</button>
+    </div>
+    <ul id="thingsToDo"></ul>
     <script src="main.js"></script>
   </body>
 </html>
