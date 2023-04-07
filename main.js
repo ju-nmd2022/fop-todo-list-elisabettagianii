@@ -25,6 +25,11 @@ function newElement() {
   deleteButton.addEventListener("click", function () {
     itemOfTheList.remove();
   });
+
+// helped by chatGTP in the next 2 lines of code; I mark as complete the list items when i click on them, so then i can identify them to style them in css 
+  itemOfTheList.addEventListener("click", function () {
+    this.classList.toggle("completed");
+  });
 }
 
 
