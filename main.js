@@ -1,8 +1,9 @@
 // I have consulted the tutorial website https://www.w3schools.com/howto/howto_js_todolist.asp
-
+let taskList = document.getElementById("taskList");
+let textNewTask = document.getElementById("textNewTask");
 
 function newElement() {
-  // I create a list where to put the new task that i'll write in the input field 
+  // I create a list where to put the new task that i'll write in the input field
   let itemOfTheList = document.createElement("li");
   let textNewTask = document.getElementById("textNewTask").value;
   let taskText = document.createTextNode(textNewTask);
@@ -26,11 +27,10 @@ function newElement() {
     itemOfTheList.remove();
   });
 
-// helped by chatGTP in the next 2 lines of code; I mark as complete the list items when i click on them, so then i can identify them to style them in css 
+  // helped by chatGTP in the next 2 lines of code; I mark as complete the list items when i click on them, so then i can identify them to style them in css
   itemOfTheList.addEventListener("click", function () {
     this.classList.toggle("completed");
   });
+
+  localStorage.taskToDo = textNewTask;
 }
-
-
-
