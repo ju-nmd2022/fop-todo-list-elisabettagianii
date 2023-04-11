@@ -4,6 +4,8 @@
 .completed {
     text-decoration: line-through;
     color: green;
+    font-style: oblique;
     
+
   }
   

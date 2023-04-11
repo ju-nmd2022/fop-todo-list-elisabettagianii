@@ -34,3 +34,9 @@ function newElement() {
 
   localStorage.taskToDo = textNewTask;
 }
+// making the task written in the input box be added to the list when the user clicks the enter key (key code 13)
+window.addEventListener("keydown", function (event) {
+  if (event.keyCode == 13) {
+    newElement();
+  }
+});
