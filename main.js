@@ -1,42 +1,68 @@
 // I have consulted the tutorial website https://www.w3schools.com/howto/howto_js_todolist.asp
-let taskList = document.getElementById("taskList");
-let textNewTask = document.getElementById("textNewTask");
+//I have consulted chatgtp to better understand the usage of localStorage
+const taskList = document.getElementById("taskList");
+const textNewTask = document.getElementById("textNewTask");
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-function newElement() {
-  // I create a list where to put the new task that i'll write in the input field
-  let itemOfTheList = document.createElement("li");
-  let textNewTask = document.getElementById("textNewTask").value;
-  let taskText = document.createTextNode(textNewTask);
-  itemOfTheList.appendChild(taskText);
-  if (textNewTask === "") {
-    alert("Empty");
-  } else {
-    // if it's not empty i add it to the list, and then i set back the value of the input text to be empty again
-    document.getElementById("taskList").appendChild(itemOfTheList);
-  }
-  document.getElementById("textNewTask").value = "";
+function createTaskElement(text) {
+  const listItem = document.createElement("li");
+  const taskText = document.createTextNode(text);
+  listItem.appendChild(taskText);
 
-  // i create a X button to add to all new added task, so I can delete them
-  let deleteButton = document.createElement("button");
+  const deleteButton = document.createElement("button");
   deleteButton.innerText = "X";
-  deleteButton.idName = "buttonX";
-  itemOfTheList.appendChild(deleteButton);
+  deleteButton.className = "buttonX";
+  listItem.appendChild(deleteButton);
 
-  // when clicked, the X button removes the task to do.
   deleteButton.addEventListener("click", function () {
-    itemOfTheList.remove();
+    const taskIndex = tasks.findIndex(task => task.text === text);
+    tasks.splice(taskIndex, 1);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    listItem.remove();
+    if (tasks.length === 0) {
+      localStorage.removeItem("tasks");
+    }
   });
 
-  // helped by chatGTP in the next 2 lines of code; I mark as complete the list items when i click on them, so then i can identify them to style them in css
-  itemOfTheList.addEventListener("click", function () {
+  listItem.addEventListener("click", function () {
     this.classList.toggle("completed");
+    const taskIndex = tasks.findIndex(task => task.text === text);
+    tasks[taskIndex].completed = !tasks[taskIndex].completed;
+    localStorage.setItem("tasks", JSON.stringify(tasks));
   });
 
-  localStorage.taskToDo = textNewTask;
+  return listItem;
 }
-// making the task written in the input box be added to the list when the user clicks the enter key (key code 13)
+
+function addTask() {
+  const textNewTaskValue = textNewTask.value.trim();
+  if (textNewTaskValue === "") {
+    alert("Empty");
+    return;
+  }
+
+  const listItem = createTaskElement(textNewTaskValue);
+  taskList.appendChild(listItem);
+  tasks.push({ text: textNewTaskValue, completed: false });
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+
+  textNewTask.value = "";
+}
+
+function loadTasks() {
+  tasks.forEach(task => {
+    const listItem = createTaskElement(task.text);
+    taskList.appendChild(listItem);
+    if (task.completed) {
+      listItem.classList.add("completed");
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", loadTasks);
+
 window.addEventListener("keydown", function (event) {
-  if (event.keyCode == 13) {
-    newElement();
+  if (event.keyCode === 13) {
+    addTask();
   }
 });
